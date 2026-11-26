@@ -1,0 +1,12 @@
+name: tota-local-satisfaction-dashboard
+title: TOTA-Local-Satisfaction-Dashboard
+username: tota2
+account: tota2
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a218ca-3529-5a51-91c9-a3144ad65d00
+bundleId:
+url: https://connect.posit.cloud/tota2/content/01a218ca-3529-5a51-91c9-a3144ad65d00
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
