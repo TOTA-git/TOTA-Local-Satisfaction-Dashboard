@@ -1,0 +1,71 @@
+name: Deploy Energy Dashboard to tota2
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "4.6.1"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libcurl4-openssl-dev \
+            libssl-dev
+          
+      - name: Install rsconnect
+        run: |
+          Rscript -e '
+            install.packages(
+              "rsconnect",
+              lib = Sys.getenv("R_LIBS_USER"),
+              repos = c(CRAN = Sys.getenv("RSPM"))
+            )
+
+            packageVersion("rsconnect")
+          '
+          
+      # Installs all R packages needed
+      - name: Install R Package Dependencies
+        run: |
+          Rscript -e 'install.packages(c("httr", "jsonlite", "readr", "dplyr", "tidyr", "lubridate", "ggplot2", "shiny", "bslib", "shinydashboard", "fresh", "plotly", "gt"))'
+
+      - name: Authenticate and deploy to tota2
+        env:
+          RSCONNECT_CLIENT_ID: ${{ secrets.RSCONNECT_CLIENT_ID }}
+          RSCONNECT_CLIENT_SECRET: ${{ secrets.RSCONNECT_CLIENT_SECRET }}
+        run: |
+          Rscript -e '
+            .libPaths(c(Sys.getenv("R_LIBS_USER"), .libPaths()))
+
+            library(rsconnect)
+            rsconnect::connectCloudClientCredentials(
+              clientId = Sys.getenv("RSCONNECT_CLIENT_ID"),
+              clientSecret = Sys.getenv("RSCONNECT_CLIENT_SECRET"),
+              accountName = "tota2"
+            )
+
+            rsconnect::deployApp(
+              appDir = ".",
+              appId = "01a218ca-3529-5a51-91c9-a3144ad65d00",
+              account = "tota2",
+              forceUpdate = TRUE,
+              logLevel = "verbose"
+            )
+          '
