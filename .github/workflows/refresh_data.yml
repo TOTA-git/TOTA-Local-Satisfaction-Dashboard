@@ -26,7 +26,7 @@ jobs:
       # Install R package dependencies
       - name: Install R Package Dependencies
         run: |
-          Rscript -e 'install.packages(c("httr", "jsonlite", "readr", "dplyr", "tidyr", "lubridate", "ggplot2", "shiny", "bslib", "shinydashboard", "fresh", "plotly", "gt"))'
+          Rscript -e 'install.packages(c("httr", "jsonlite", "readr", "dplyr", "tidyr", "lubridate", "httr2", "stringr"))'
 
       # Run data refresh script
       - name: Run data refresh script
