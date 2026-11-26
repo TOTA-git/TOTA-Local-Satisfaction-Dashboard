@@ -49,7 +49,7 @@ refresh_dataset <- function(name, fetch, write) {
 refresh_dataset(
   "statements",
   function() {
-    data <- read_csv(STATEMENTS, show_col_types =  FALSE)
+    data <- read_csv(Sys.getenv("STATEMENTS"), show_col_types =  FALSE)
     
     df <- pivot_longer(data,
                        cols = c(`British Columbia`, `Vancouver, Coast & Mountains`, `Vancouver Island`, `Thompson Okanagan`, `Kootenay Rockies`, `Northern BC`, `Cariboo Chilcotin Coast`),
@@ -64,7 +64,7 @@ refresh_dataset(
 refresh_dataset(
   "preceptions",
   function() {
-    data <- read_csv(PERCEPTIONS, show_col_types =  FALSE)
+    data <- read_csv(Sys.getenv("PERCEPTIONS"), show_col_types =  FALSE)
     
     df <- pivot_longer(data,
                        cols = c(`British Columbia`, `Thompson Okanagan`),
